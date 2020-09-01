@@ -9,6 +9,8 @@
     <typeAliases>
 
         <package name="com.cqu.crm.settings.domain"/>
+        <package name="com.cqu.crm.workbench.domain"/>
+        <package name="com.cqu.crm.vo"/>
 
 
     </typeAliases>
@@ -29,6 +31,7 @@
     <mappers>
 
         <package name="com.cqu.crm.settings.dao"/>
+        <package name="com.cqu.crm.workbench.dao"/>
 
     </mappers>
 </configuration>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqu.crm.workbench.dao.ActivityDao">
+    <insert id="save">
+        insert into tbl_activity
+        values(#{id}, #{owner}, #{name}, #{startDate}, #{endDate}, #{cost}, #{description}, #{createTime}, #{createBy}, #{editTime}, #{editBy})
+    </insert>
+
+    <select id="countByCondition" resultType="int" >
+        select count(*)
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner = u.id
+
+        <where>
+            <if test="name != null and name != ''">
+                a.name like '%' #{name} '%'
+            </if>
+
+            <if test="owner != null and owner != ''">
+                and u.name like '%' #{owner} '%'
+            </if>
+
+            <if test="startDate != null and startDate != ''">
+                and a.startDate &gt;= #{startDate}
+            </if>
+
+            <if test="endDate != null and endDate != ''">
+                and a.endDate &lt;= #{endDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="getActivityListByCondition" resultType="Activity">
+        select
+
+        a.id,
+        a.name,
+        u.name as owner,
+        a.startDate,
+        a.endDate
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner = u.id
+
+        <where>
+            <if test="name != null and name != ''">
+                a.name like '%' #{name} '%'
+            </if>
+
+            <if test="owner != null and owner != ''">
+                and u.name like '%' #{owner} '%'
+            </if>
+
+            <if test="startDate != null and startDate != ''">
+                and a.startDate &gt;= #{startDate}
+            </if>
+
+            <if test="endDate != null and endDate != ''">
+                and a.endDate &lt;= #{endDate}
+            </if>
+        </where>
+
+        order by a.createTime desc
+        limit #{skipCount}, #{pageSize}
+    </select>
+
+    <delete id="deleteActivities">
+        delete from tbl_activity
+        where id in
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getUserList" resultType="User">
+        select * from tbl_user
+    </select>
+
+    <select id="getActivityById" resultType="Activity">
+        select * from tbl_activity
+        where id = #{id}
+    </select>
+
+    <update id="update">
+        update tbl_activity set
+
+        owner = #{owner},
+        name = #{name},
+        startDate = #{startDate},
+        endDate = #{endDate},
+        cost = #{cost},
+        description = #{description},
+        editTime = #{editTime},
+        editBy = #{editBy}
+
+        where id = #{id}
+    </update>
+</mapper>

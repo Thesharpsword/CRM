@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserController extends HttpServlet {
@@ -28,8 +29,23 @@ public class UserController extends HttpServlet {
 
         if ("/settings/user/login.do".equals(path)) {
             login(request, response);
-        } else if ("/settings/user/xxx.do".equals(path)) {
+        } else if ("/settings/user/get.do".equals(path)) {
+            get(request, response);
+        }
+    }
 
+    private void get(HttpServletRequest request, HttpServletResponse response) {
+        //  创建service对象，业务层开发统一使用代理类形态的接口对象
+        UserService us = (UserService) ServiceFactory.getService(new UserServiceImpl());
+
+        List<User> userList = null;
+        try {
+            //  获取数据库中所有用户信息
+            userList = us.getUserList();
+            PrintJson.printJsonObj(response, userList);
+
+        } catch (LoginException e) {
+            e.printStackTrace();
         }
     }
 

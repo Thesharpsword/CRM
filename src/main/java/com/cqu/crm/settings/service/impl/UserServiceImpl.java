@@ -9,6 +9,7 @@ import com.cqu.crm.utils.SqlSessionUtil;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserServiceImpl implements UserService {
@@ -49,5 +50,16 @@ public class UserServiceImpl implements UserService {
         }
 
         return user;
+    }
+
+    @Override
+    public List<User> getUserList() throws LoginException {
+        List<User> userList = userDao.getUserList();
+
+        if (userList == null) {
+            throw new LoginException("查询失败");
+        }
+
+        return userList;
     }
 }

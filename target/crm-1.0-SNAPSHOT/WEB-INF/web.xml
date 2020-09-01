@@ -27,6 +27,7 @@
     <url-pattern>*.jsp</url-pattern>
   </filter-mapping>
 
+  <!--用户控制器-->
   <servlet>
     <servlet-name>UserController</servlet-name>
     <servlet-class>com.cqu.crm.settings.web.controller.UserController</servlet-class>
@@ -36,4 +37,18 @@
     <url-pattern>/settings/user/login.do</url-pattern>
   </servlet-mapping>
 
+  <!--市场活动控制器-->
+  <servlet>
+    <servlet-name>ActivityController</servlet-name>
+    <servlet-class>com.cqu.crm.workbench.web.controller.ActivityController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ActivityController</servlet-name>
+    <url-pattern>/workbench/activity/getUserList.do</url-pattern>
+    <url-pattern>/workbench/activity/save.do</url-pattern>
+    <url-pattern>/workbench/activity/getActivityList.do</url-pattern>
+    <url-pattern>/workbench/activity/delete.do</url-pattern>
+    <url-pattern>/workbench/activity/updateQuery.do</url-pattern>
+    <url-pattern>/workbench/activity/update.do</url-pattern>
+    </servlet-mapping>
 </web-app>

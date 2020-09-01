@@ -17,6 +17,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		$(function () {
 
+			if (window.top !== window) {
+				window.top.location = window.location;
+			}
+
 			//	页面加载完毕后，用户名文本框自动获得焦点
 			$("#loginAct").focus();
 
