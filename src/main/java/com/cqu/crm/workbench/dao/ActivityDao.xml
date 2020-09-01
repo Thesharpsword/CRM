@@ -77,10 +77,6 @@
         </foreach>
     </delete>
 
-    <select id="getUserList" resultType="User">
-        select * from tbl_user
-    </select>
-
     <select id="getActivityById" resultType="Activity">
         select * from tbl_activity
         where id = #{id}

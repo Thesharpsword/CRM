@@ -92,7 +92,7 @@ public class ActivityController extends HttpServlet {
         ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
 
         try {
-            Map<String, Object> map = as.updateById(id);
+            Map<String, Object> map = as.getUpdateInfo(id);
             PrintJson.printJsonObj(response, map);
         } catch (ActivityException e) {
             e.printStackTrace();

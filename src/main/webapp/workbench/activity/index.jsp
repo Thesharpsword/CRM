@@ -55,12 +55,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					$.each(data, function (index, content) {
 						$("#create-marketActivityOwner").append("<option value='" + content.id + "'>" + content.name + "</option>")
 					})
+					var id = "${user.id}";
+
+					$("#create-marketActivityOwner").val(id);
 				}
 			})
-
-			var id = "${user.id}";
-
-			$("#create-marketActivityOwner").val(id);
 
 			//	数据加载完毕，打开模态窗口
 			$("#createActivityModal").modal("show");
@@ -160,11 +159,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			} else if ($select.length > 1) {
 				alert("一次只能修改一条活动记录");
 			} else {
+				//	获取需要修改的活动id
+				var updateId = $select.val();
+				$("#update-id").val(updateId);
+
 				//	ajax查询所所需信息
 				$.ajax({
 					url : "workbench/activity/updateQuery.do",
 					data : {
-						"id" : $select.val()
+						"id" : updateId
 					},
 					type : "post",
 					dataType : "json",
@@ -172,19 +175,24 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						/*
                         {"uList":[{u1}, {u2}, ..., {}], "activity":{id:?, name:?, ...}}
                          */
-						var html = "";
+						var html = "<option></option>";
 						$.each(data.uList, function (i, n) {
 							html += "<option value='" + n.id + "'>"+ n.name +"</option>";
 						})
 						$("#edit-owner").html(html);
+
+						$("#edit-id").val(data.activity.owner);
 
 						$("#edit-name").val(data.activity.name);
 						$("#edit-startDate").val(data.activity.startDate);
 						$("#edit-endDate").val(data.activity.endDate);
 						$("#edit-cost").val(data.activity.cost);
 						$("#edit-description").val(data.activity.description);
+						var ownerId = data.activity.owner;
+						$("#edit-owner").val(ownerId);	//	将活动owner关联用户下拉列表
 					}
 				})
+
 				//	显示模态窗口
 				$("#editActivityModal").modal("show");
 			}
@@ -340,6 +348,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<input type="hidden" id="hidden-owner"/>
 	<input type="hidden" id="hidden-startDate"/>
 	<input type="hidden" id="hidden-endDate"/>
+
+	<input type="hidden" id="update-id">
+	<input type="hidden" id="edit-id">
 	<!-- 创建市场活动的模态窗口 -->
 	<div class="modal fade" id="createActivityModal" role="dialog">
 		<div class="modal-dialog" role="document" style="width: 85%;">

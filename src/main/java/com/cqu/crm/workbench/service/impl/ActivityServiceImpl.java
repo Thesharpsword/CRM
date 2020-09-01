@@ -2,6 +2,7 @@ package com.cqu.crm.workbench.service.impl;
 
 
 import com.cqu.crm.exception.ActivityException;
+import com.cqu.crm.settings.dao.UserDao;
 import com.cqu.crm.settings.domain.User;
 import com.cqu.crm.utils.SqlSessionUtil;
 import com.cqu.crm.vo.PageInotationVO;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class ActivityServiceImpl implements ActivityService {
     private ActivityDao activityDao = SqlSessionUtil.getSqlSession().getMapper(ActivityDao.class);
     private ActivityRemarkDao activityRemarkDao = SqlSessionUtil.getSqlSession().getMapper(ActivityRemarkDao.class);
-
+    private UserDao userDao = SqlSessionUtil.getSqlSession().getMapper(UserDao.class);
 
     @Override
     public void save(Activity activity) throws ActivityException {
@@ -71,9 +72,9 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Map<String, Object> updateById(String id) throws ActivityException {
+    public Map<String, Object> getUpdateInfo(String id) throws ActivityException {
         //  查询用户信息
-        List<User> userList = activityDao.getUserList();
+        List<User> userList = userDao.getUserList();
         //  根据id查询活动信息
         Activity activity = activityDao.getActivityById(id);
 

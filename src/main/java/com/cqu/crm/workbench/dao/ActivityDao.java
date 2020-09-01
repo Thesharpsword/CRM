@@ -17,8 +17,6 @@ public interface ActivityDao {
 
     Integer deleteActivities(String[] ids);
 
-    List<User> getUserList();
-
     Activity getActivityById(String id);
 
     int update(Activity activity);

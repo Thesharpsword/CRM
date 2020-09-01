@@ -13,7 +13,7 @@ public interface ActivityService {
 
     boolean deleteById(String[] ids) throws ActivityException;
 
-    Map<String, Object> updateById(String id) throws ActivityException;
+    Map<String, Object> getUpdateInfo(String id) throws ActivityException;
 
     boolean update(Activity activity);
 }
