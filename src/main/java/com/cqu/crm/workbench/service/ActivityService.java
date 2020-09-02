@@ -3,7 +3,9 @@ package com.cqu.crm.workbench.service;
 import com.cqu.crm.exception.ActivityException;
 import com.cqu.crm.vo.PageInotationVO;
 import com.cqu.crm.workbench.domain.Activity;
+import com.cqu.crm.workbench.domain.ActivityRemark;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ActivityService {
@@ -16,4 +18,8 @@ public interface ActivityService {
     Map<String, Object> getUpdateInfo(String id) throws ActivityException;
 
     boolean update(Activity activity);
+
+    Activity detail(String id) throws ActivityException;
+
+    List<ActivityRemark> getActivityRemarkList(String id);
 }

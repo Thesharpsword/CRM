@@ -11,6 +11,7 @@ import com.cqu.crm.utils.ServiceFactory;
 import com.cqu.crm.utils.UUIDUtil;
 import com.cqu.crm.vo.PageInotationVO;
 import com.cqu.crm.workbench.domain.Activity;
+import com.cqu.crm.workbench.domain.ActivityRemark;
 import com.cqu.crm.workbench.service.ActivityService;
 import com.cqu.crm.workbench.service.impl.ActivityServiceImpl;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -46,6 +47,36 @@ public class ActivityController extends HttpServlet {
             updateQuery(request, response);
         } else if ("/workbench/activity/update.do".equals(path)) {
             update(request, response);
+        } else if ("/workbench/activity/detail.do".equals(path)) {
+            detail(request, response);
+        } else if ("/workbench/activity/getActivityRemarkList.do".equals(path)) {
+            getActivityRemarkList(request, response);
+        }
+    }
+
+    private void getActivityRemarkList(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到市场活动备注方法");
+
+        String id = request.getParameter("activityId");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        List<ActivityRemark> remarkList = as.getActivityRemarkList(id);
+
+        PrintJson.printJsonObj(response, remarkList);
+    }
+
+    private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("进入到市场活动详情方法");
+
+        String id = request.getParameter("id");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        try {
+            Activity a = as.detail(id);
+            request.setAttribute("a", a);
+            //  请求转发至detail.jsp
+            request.getRequestDispatcher("detail.jsp").forward(request, response);
+
+        } catch (ActivityException e) {
+            e.printStackTrace();
         }
     }
 

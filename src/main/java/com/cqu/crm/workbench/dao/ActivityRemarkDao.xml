@@ -18,4 +18,12 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="getActivityRemarkListByAid" resultType="ActivityRemark">
+        select
+        *
+        from tbl_activity_remark
+
+        where activityId = #{activityId}
+    </select>
 </mapper>

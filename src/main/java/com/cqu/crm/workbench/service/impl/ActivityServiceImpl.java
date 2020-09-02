@@ -9,9 +9,9 @@ import com.cqu.crm.vo.PageInotationVO;
 import com.cqu.crm.workbench.dao.ActivityDao;
 import com.cqu.crm.workbench.dao.ActivityRemarkDao;
 import com.cqu.crm.workbench.domain.Activity;
+import com.cqu.crm.workbench.domain.ActivityRemark;
 import com.cqu.crm.workbench.service.ActivityService;
 
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,6 +99,21 @@ public class ActivityServiceImpl implements ActivityService {
         }
 
         return flag;
+    }
+
+    @Override
+    public Activity detail(String id) throws ActivityException {
+        Activity activity = activityDao.detail(id);
+        if (activity == null) {
+            throw new  ActivityException("获取详细信息失败");
+        }
+        return activity;
+    }
+
+    @Override
+    public List<ActivityRemark> getActivityRemarkList(String id) {
+        List<ActivityRemark> remarkList = activityRemarkDao.getActivityRemarkListByAid(id);
+        return remarkList;
     }
 
 }
