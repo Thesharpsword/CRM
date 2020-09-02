@@ -17,7 +17,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 	<%--bootstrap分页插件--%>
-<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_paginatioin.min.css">
+<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_pagination.min.css">
 <script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
 <script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
 
@@ -55,12 +55,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					$.each(data, function (index, content) {
 						$("#create-marketActivityOwner").append("<option value='" + content.id + "'>" + content.name + "</option>")
 					})
+					var id = "${user.id}";
+
+					$("#create-marketActivityOwner").val(id);
 				}
 			})
-
-			var id = "${user.id}";
-
-			$("#create-marketActivityOwner").val(id);
 
 			//	数据加载完毕，打开模态窗口
 			$("#createActivityModal").modal("show");
@@ -91,9 +90,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					if (data.success) {
 						alert("活动创建成功");
 						// 刷新市场活动列表
-						pageList(1, 2);
-						//	清空添加模态窗口
-						//	此方法用不了
+						pageList(1, $("activityPage").bs_pagination('getOption', 'rowsPerpage'));
+						//	清空添加模态窗口	此方法用不了
 						// $("#activityAddForm").reset();
 						$("#activityAddForm")[0].reset();
 
@@ -139,7 +137,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							if (data.success) {
 								alert("删除活动成功");
 								// 刷新市场活动列表
-								pageList(1, 2);
+								pageList(1, $("activityPage").bs_pagination('getOption', 'rowsPerpage'));
 							} else {
 								alert("删除活动失败");
 							}
@@ -160,11 +158,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			} else if ($select.length > 1) {
 				alert("一次只能修改一条活动记录");
 			} else {
+				//	获取需要修改的活动id
+				var updateId = $select.val();
+				$("#update-id").val(updateId);
+
 				//	ajax查询所所需信息
 				$.ajax({
 					url : "workbench/activity/updateQuery.do",
 					data : {
-						"id" : $select.val()
+						"id" : updateId
 					},
 					type : "post",
 					dataType : "json",
@@ -172,19 +174,24 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						/*
                         {"uList":[{u1}, {u2}, ..., {}], "activity":{id:?, name:?, ...}}
                          */
-						var html = "";
+						var html = "<option></option>";
 						$.each(data.uList, function (i, n) {
 							html += "<option value='" + n.id + "'>"+ n.name +"</option>";
 						})
 						$("#edit-owner").html(html);
+
+						$("#edit-id").val(data.activity.owner);
 
 						$("#edit-name").val(data.activity.name);
 						$("#edit-startDate").val(data.activity.startDate);
 						$("#edit-endDate").val(data.activity.endDate);
 						$("#edit-cost").val(data.activity.cost);
 						$("#edit-description").val(data.activity.description);
+						var ownerId = data.activity.owner;
+						$("#edit-owner").val(ownerId);	//	将活动owner关联用户下拉列表
 					}
 				})
+
 				//	显示模态窗口
 				$("#editActivityModal").modal("show");
 			}
@@ -215,7 +222,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                          */
 						if (data.success) {
 							//	刷新市场活动表格
-							pageList(1, 2);
+							pageList($("activityPage").bs_pagination('getOption', 'currentPage'),
+									 $("activityPage").bs_pagination('getOption', 'rowsPerpage'));
+
 						} else {
 							alert("活动修改失败");
 						}
@@ -247,7 +256,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#hidden-startDate").val($.trim($("#search-startDate").val()));
 			$("#hidden-endDate").val($.trim($("#search-endDate").val()));
 
-			pageList(1, 2);
+			pageList($("activityPage").bs_pagination('getOption', 'currentPage'),
+					$("activityPage").bs_pagination('getOption', 'rowsPerpage'));
 		})
 
 		//	页面加载完毕后刷新市场活动表格
@@ -340,6 +350,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<input type="hidden" id="hidden-owner"/>
 	<input type="hidden" id="hidden-startDate"/>
 	<input type="hidden" id="hidden-endDate"/>
+
+	<input type="hidden" id="update-id">
+	<input type="hidden" id="edit-id">
 	<!-- 创建市场活动的模态窗口 -->
 	<div class="modal fade" id="createActivityModal" role="dialog">
 		<div class="modal-dialog" role="document" style="width: 85%;">

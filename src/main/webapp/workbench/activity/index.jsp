@@ -17,7 +17,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 	<%--bootstrap分页插件--%>
-<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_paginatioin.min.css">
+<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_pagination.min.css">
 <script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
 <script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
 
@@ -90,9 +90,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					if (data.success) {
 						alert("活动创建成功");
 						// 刷新市场活动列表
-						pageList(1, 2);
-						//	清空添加模态窗口
-						//	此方法用不了
+						pageList(1, $("activityPage").bs_pagination('getOption', 'rowsPerpage'));
+						//	清空添加模态窗口	此方法用不了
 						// $("#activityAddForm").reset();
 						$("#activityAddForm")[0].reset();
 
@@ -138,7 +137,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							if (data.success) {
 								alert("删除活动成功");
 								// 刷新市场活动列表
-								pageList(1, 2);
+								pageList(1, $("activityPage").bs_pagination('getOption', 'rowsPerpage'));
 							} else {
 								alert("删除活动失败");
 							}
@@ -223,7 +222,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                          */
 						if (data.success) {
 							//	刷新市场活动表格
-							pageList(1, 2);
+							pageList($("activityPage").bs_pagination('getOption', 'currentPage'),
+									 $("activityPage").bs_pagination('getOption', 'rowsPerpage'));
+
 						} else {
 							alert("活动修改失败");
 						}
@@ -255,7 +256,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#hidden-startDate").val($.trim($("#search-startDate").val()));
 			$("#hidden-endDate").val($.trim($("#search-endDate").val()));
 
-			pageList(1, 2);
+			pageList($("activityPage").bs_pagination('getOption', 'currentPage'),
+					$("activityPage").bs_pagination('getOption', 'rowsPerpage'));
 		})
 
 		//	页面加载完毕后刷新市场活动表格
