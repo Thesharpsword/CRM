@@ -22,4 +22,10 @@ public interface ActivityService {
     Activity detail(String id) throws ActivityException;
 
     List<ActivityRemark> getActivityRemarkList(String id);
+
+    boolean deleteRemark(String id);
+
+    boolean saveRemark(ActivityRemark remark);
+
+    boolean updateRemark(ActivityRemark remark);
 }

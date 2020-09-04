@@ -116,4 +116,36 @@ public class ActivityServiceImpl implements ActivityService {
         return remarkList;
     }
 
+    @Override
+    public boolean deleteRemark(String id) {
+        boolean flag = true;
+        int count = activityRemarkDao.deleteById(id);
+
+        if (count != 1) {
+            flag = false;
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean saveRemark(ActivityRemark remark) {
+        boolean flag = true;
+        int count = activityRemarkDao.saveRemark(remark);
+        if (count != 1) {
+            flag = false;
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean updateRemark(ActivityRemark remark) {
+        boolean flag = true;
+        int count = activityRemarkDao.updateRemark(remark);
+
+        if (count != 1) {
+            flag = false;
+        }
+        return flag;
+    }
+
 }

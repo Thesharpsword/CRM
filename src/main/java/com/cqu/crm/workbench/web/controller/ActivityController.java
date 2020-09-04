@@ -14,14 +14,12 @@ import com.cqu.crm.workbench.domain.Activity;
 import com.cqu.crm.workbench.domain.ActivityRemark;
 import com.cqu.crm.workbench.service.ActivityService;
 import com.cqu.crm.workbench.service.impl.ActivityServiceImpl;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +49,92 @@ public class ActivityController extends HttpServlet {
             detail(request, response);
         } else if ("/workbench/activity/getActivityRemarkList.do".equals(path)) {
             getActivityRemarkList(request, response);
+        } else if ("/workbench/activity/deleteRemark.do".equals(path)) {
+            deleteRemark(request, response);
+        } else if ("/workbench/activity/saveRemark.do".equals(path)) {
+            saveRemark(request, response);
+        } else if ("/workbench/activity/updateRemark.do".equals(path)) {
+            updateRemark(request, response);
+        }
+    }
+
+    private void updateRemark(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到市场活动备注修改方法");
+
+        String noteContent = request.getParameter("updateRemark");
+        String editTime = DateTimeUtil.getSysTime();
+        String editBy =request.getParameter("editBy");
+        String editFlag = "1";
+        String id = request.getParameter("id");
+
+        ActivityRemark remark = new ActivityRemark();
+
+        remark.setNoteContent(noteContent);
+        remark.setEditTime(editTime);
+        remark.setEditBy(editBy);
+        remark.setEditFlag(editFlag);
+        remark.setId(id);
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        boolean flag = as.updateRemark(remark);
+
+        if (flag) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("success", true);
+            map.put("ar", remark);
+            PrintJson.printJsonObj(response, map);
+        } else {
+            PrintJson.printJsonFlag(response, false);
+        }
+    }
+
+    private void saveRemark(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到市场活动备注添加方法");
+
+        String id = UUIDUtil.getUUID();
+        String noteContent = request.getParameter("noteContent");
+        String createTime = DateTimeUtil.getSysTime();
+        String createBy = request.getParameter("createBy");
+        String editFlag = "0";
+        String activityId = request.getParameter("activityId");
+
+        ActivityRemark remark = new ActivityRemark();
+
+        remark.setId(id);
+        remark.setNoteContent(noteContent);
+        remark.setCreateTime(createTime);
+        remark.setCreateBy(createBy);
+        remark.setEditFlag(editFlag);
+        remark.setActivityId(activityId);
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        boolean flag = as.saveRemark(remark);
+
+        if (flag) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("success", true);
+            map.put("ar", remark);
+            PrintJson.printJsonObj(response, map);
+        } else {
+            PrintJson.printJsonFlag(response, false);
+        }
+    }
+
+    private void deleteRemark(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到市场活动备注删除方法");
+        //  获取备注id
+        String id = request.getParameter("remarkId");
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        boolean flag = as.deleteRemark(id);
+
+        if (flag) {
+            PrintJson.printJsonFlag(response, flag);
+        } else {
+            PrintJson.printJsonFlag(response, flag);
         }
     }
 
