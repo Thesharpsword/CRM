@@ -108,6 +108,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	    $("#editRemarkModal").modal("show");
 
+	    //  为隐藏域中的标签赋值，保存备注id信息
 	    $("#remarkId").val(id);
     }
 
@@ -116,7 +117,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	/*
 	* 刷新备注列表的时机
 	* 	1 详情页面加载完成
-	* 	2 编辑备注、删除备注、添加备注
 	* */
 	function activityRemarkList() {
 		//	根据当前市场活动id查对应的市场活动备注

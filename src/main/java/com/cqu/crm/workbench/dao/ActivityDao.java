@@ -22,4 +22,8 @@ public interface ActivityDao {
     int update(Activity activity);
 
     Activity detail(String id);
+
+    List<Activity> getActivityListByIds(List<String> activityList);
+
+    List<Activity> getRelatedActivityByActivityName(Map<String, String> map);
 }

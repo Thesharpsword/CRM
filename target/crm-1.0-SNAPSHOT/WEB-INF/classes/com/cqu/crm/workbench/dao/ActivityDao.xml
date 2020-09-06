@@ -119,4 +119,56 @@
 
         a.id = #{id}
     </select>
+
+    <select id="getActivityListByIds" resultType="Activity">
+        select
+
+        car.id as id,
+        u.name as owner,
+        a.name,
+        a.startDate,
+        a.endDate,
+        a.cost,
+        a.description,
+        a.createTime,
+        a.createBy,
+        a.editTime,
+        a.editBy
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner = u.id
+        join tbl_clue_activity_relation car
+        on a.id = car.activityId
+
+        where a.id in
+        <foreach collection="list" open="(" close=")" item="aid" separator=",">
+            #{aid}
+        </foreach>
+
+    </select>
+
+    <select id="getRelatedActivityByActivityName" resultType="Activity">
+        select
+
+        a.id,
+        u.name as owner,
+        a.name,
+        a.startDate,
+        a.endDate
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+
+        where a.name like '%' #{aname} '%' and a.id not in (
+            select
+
+            activityId
+
+            from tbl_clue_activity_relation
+
+            where clueId = #{clueId}
+        )
+    </select>
 </mapper>
